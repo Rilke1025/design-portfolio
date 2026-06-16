@@ -1,0 +1,341 @@
+/* ==================================================
+   [0] 基础清除与全局属性
+================================================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { width: 100vw; height: 100vh; overflow: hidden; background: #fff; font-family: sans-serif; }
+img { display: block; width: 100%; height: 100%; object-fit: contain; }
+video { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.page { display: none; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
+.page.active { display: block; }
+
+/* 🌟 全局纸质纹理图层 */
+.global-texture {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background-size: cover; background-position: center; background-repeat: repeat;
+    mix-blend-mode: multiply; opacity: 0.5; pointer-events: none; 
+    z-index: 10000; 
+}
+
+#global-nav {
+    position: fixed; top: 0; left: 0; width: 100%; height: 70px;
+    display: flex; justify-content: space-around; align-items: center;
+    z-index: 9999; 
+    background: transparent; 
+    padding: 0 40px;
+    transition: background 0.3s;
+}
+.nav-item { cursor: pointer; color: #888; text-decoration: none; transition: 0.3s; font-size: 14px;}
+.nav-item:hover, .nav-item.active { color: #000; font-weight: bold; }
+.custom-tooltip { position: fixed; pointer-events: none; opacity: 0; background: rgba(0,0,0,0.75); color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; letter-spacing: 1px; z-index: 99999; transition: opacity 0.2s ease; }
+
+/* =========================================================================
+   🏠 [1] 全新首页自适应长图滚动空间 (Home)
+========================================================================= */
+#page-home { overflow-y: auto !important; overflow-x: hidden !important; position: relative; width: 100%; height: 100vh; scroll-behavior: smooth; background-color: #000; }
+#home-p5-container { width: 100%; height: auto; position: absolute; top: 0; left: 0; z-index: 10; }
+.home-scroll-profile-zone { width: 100%; min-height: 50vh; background: rgba(255, 255, 255, 0.96); display: flex; justify-content: center; align-items: center; padding: 90px 40px; position: relative; margin-top: var(--home-bg-calculated-height, 100vh); z-index: 20; box-shadow: 0 -25px 50px rgba(0,0,0,0.15); }
+.profile-card { display: flex; max-width: 1000px; width: 100%; gap: 60px; align-items: center; }
+.profile-avatar { width: 260px; height: 260px; object-fit: cover; border-radius: 50%; box-shadow: 0 12px 35px rgba(0,0,0,0.15); }
+.profile-text { flex: 1; }
+.profile-text h2 { font-size: 26px; color: #111; margin-bottom: 22px; letter-spacing: 2px; }
+.profile-text p { font-size: 15px; color: #555; line-height: 2; margin-bottom: 15px; }
+.home-modal-mask { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: transparent; z-index: 100000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+.home-modal-mask.open { display: flex; opacity: 1; }
+.home-modal-content { position: relative; max-width: 80vw; max-height: 85vh; background: transparent; }
+.home-modal-content img { max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; filter: drop-shadow(0 25px 40px rgba(0,0,0,0.2)); }
+.home-modal-close { position: absolute; top: -45px; right: -45px; color: #111; font-size: 32px; cursor: pointer; transition: transform 0.2s; }
+.home-modal-close:hover { transform: scale(1.2); }
+
+/* ==================================================
+   [2] 平面设计 (Graphic Design)
+================================================== */
+.graphic-layout { display: flex; width: 100vw; height: 100vh; background: #fff; }
+.graphic-sidebar { width: 26vw; background: #f8f8f8; padding: 40px; display: flex; flex-direction: column; height: 100vh; }
+.back-home { cursor: pointer; color: #666; margin-bottom: 40px; font-size: 24px; }
+.sidebar-dynamic-window { position: relative; width: 100%; overflow: hidden; height: 300px; margin-bottom: 20px; }
+.sidebar-dynamic-track { transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.sidebar-slide { height: 300px; display: flex; flex-direction: column; justify-content: flex-start; gap: 30px; }
+.sidebar-title-img { width: 100%; max-width: 260px; height: 50px; object-fit: contain; object-position: left center; background: transparent; }
+.sidebar-intro { font-size: 14px; color: #555; line-height: 2; width: 80%; margin-top: 25px;}
+.sidebar-dots { display: flex; gap: 30px; margin-bottom: 40px; margin-top: 50px; }
+.sidebar-dots .dot { width: 8px; height: 8px; background: #ccc; cursor: pointer; transition: 0.3s; }
+.sidebar-dots .dot:hover { transform: scale(1.5); }
+.sidebar-dots .dot.active { background: #000; }
+.sidebar-bottom-icons { display: flex; justify-content: center; gap: 85px; margin-top: auto; margin-bottom: 20px; }
+.sidebar-bottom-icons img { width: 12%; height: auto; object-fit: contain; background: transparent; cursor: pointer; transition: 0.2s;}
+.sidebar-bottom-icons img:hover { transform: translateY(-5px); }
+.graphic-main { flex: 1; padding: 60px; background: #fff; scroll-behavior: smooth; height: 100vh; max-height: 100vh; overflow-y: auto; }
+.g-section { margin-bottom: 120px; }
+.section-heading { font-size: 15px; color: #111; margin-bottom: 30px; letter-spacing: 1px; font-weight: bold; }
+.poster-series-wrapper { display: flex; justify-content: space-between; margin-bottom: 60px; }
+.series-col { width: 26%; display: flex; flex-direction: column; }
+.carousel-wrapper { position: relative; width: 100%; border-radius: 4px; overflow: hidden; }
+.carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; background: rgba(255, 255, 255, 0.85); color: #333; font-size: 12px; font-weight: bold; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: 0.3s; }
+.carousel-btn:hover { background: #fff; transform: translateY(-50%) scale(1.15); color: #000; }
+.carousel-btn.left { left: 8px; } .carousel-btn.right { right: 8px; }
+.series-h-scroll { display: flex; width: 100%; overflow-x: auto; scroll-snap-type: x mandatory; background: #f0f0f0; scroll-behavior: smooth; }
+.series-h-scroll::-webkit-scrollbar { display: none; } 
+.series-h-scroll img { width: 100%; aspect-ratio: 1080 / 1920; flex-shrink: 0; object-fit: cover; scroll-snap-align: center; cursor: pointer; transition: 0.3s; }
+.series-h-scroll img:hover { opacity: 0.9; }
+.series-caption { text-align: center; font-size: 13px; font-weight: bold; color: #333; margin-top: 15px; }
+.poster-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 60px; align-items: start; }
+.p-grid-item { background: #f0f0f0; cursor: pointer; transition: 0.3s; border-radius: 4px; overflow: hidden; }
+.p-grid-item:hover { transform: scale(1.04); z-index: 2; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+.p-grid-item img { width: 100%; height: auto; display: block; }
+.coverflow-wrapper { position: relative; width: 100%; height: 50vh; min-height: 400px; display: flex; justify-content: center; align-items: center; perspective: 1500px; margin-top: 50px; margin-bottom: 80px; }
+.coverflow-track { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; transform-style: preserve-3d; }
+.cf-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(0,0,0,0.1); color: #555; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; z-index: 50; transition: 0.3s; font-size: 16px; }
+.cf-arrow:hover { background: #000; color: #fff; scale: 1.1; }
+.cf-arrow.left { left: 0%; } .cf-arrow.right { right: 0%; }
+
+/* 🌟 修复项 2：优化卡顿问题！取消性能杀手 'all' 动画，使用 transform 与硬件加速 */
+.cf-item { 
+    position: absolute; max-width: 55%; max-height: 90%; width: auto; height: auto; object-fit: contain; 
+    border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease; 
+    will-change: transform, opacity; /* 开启硬件加速，告别卡顿 */
+    cursor: pointer; 
+}
+
+.cf-front { transform: translate3d(0, 0, 0); z-index: 10; opacity: 1; }
+.cf-s1 { transform: translate3d(12%, 0, -50px); z-index: 9; opacity: 0.95; }
+.cf-s2 { transform: translate3d(-12%, 0, -100px); z-index: 8; opacity: 0.9; }
+.cf-s3 { transform: translate3d(24%, 0, -150px); z-index: 7; opacity: 0.85; }
+.cf-s4 { transform: translate3d(-24%, 0, -200px); z-index: 6; opacity: 0.8; }
+.cf-s5 { transform: translate3d(36%, 0, -250px); z-index: 5; opacity: 0.75; }
+.cf-s6 { transform: translate3d(-36%, 0, -300px); z-index: 4; opacity: 0.7; }
+
+/* 优化主视觉点击散开的过程，防止布局抖动卡顿 */
+#kv-coverflow.kv-grid-mode { display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; align-content: start; transform-style: flat; }
+#kv-coverflow.kv-grid-mode .cf-item { 
+    position: relative; max-width: 100%; width: 100%; height: auto; object-fit: cover; background: transparent !important; transform: none !important; opacity: 1 !important; z-index: 1 !important; animation: none !important; box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease !important;
+}
+#kv-coverflow.kv-grid-mode .cf-item:hover { transform: translateY(-5px) !important; box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important; z-index: 2 !important; }
+
+.long-format-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 45px; align-items: start; }
+.long-item { position: relative; height: 500px; background: #f0f0f0; overflow: hidden; border-radius: 0px !important; cursor: pointer; transition: transform 0.3s; }
+.long-item:hover { transform: translateY(-5px); }
+.long-item img { width: 100%; height: auto; display: block; border-radius: 0px !important; }
+.long-mask { position: absolute; bottom: 0; left: 0; width: 100%; height: 150px; background: linear-gradient(to bottom, transparent, #fff); z-index: 2; pointer-events: none; }
+
+/* ==================================================
+   [3] 品牌设计样式
+================================================== */
+#page-brand { position: relative; width: 100vw; height: 100vh; overflow: hidden; background: #fff; }
+.p5-canvas-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; transition: opacity 0.4s ease; }
+.p5-canvas-wrapper.fade-out { opacity: 0; pointer-events: none; }
+.brand-content-layer { position: absolute; width: 100vw; height: 100vh; top: 0; left: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; z-index: 5; transition: opacity 0.1s ease; }
+.brand-content-layer.show { opacity: 1; pointer-events: auto; }
+.brand-carousel-wrapper { position: relative; width: 100vw; height: auto; display: flex; align-items: center; justify-content: center; margin-top: -8vh; z-index: 6; }
+.brand-nav-arrow { display: none !important; }
+.b-cards-track { width: 86vw; display: flex; gap: 2vw; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory; padding: 20px 0; }
+.b-cards-track::-webkit-scrollbar { display: none; }
+.b-card { flex: 0 0 calc((100% - 6vw) / 4); aspect-ratio: 16 / 9; background: #eee; cursor: pointer; border-radius: 4px; overflow: hidden; scroll-snap-align: start; transition: transform 0.3s, box-shadow 0.3s; }
+.b-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+.b-card img { width: 100%; height: 100%; object-fit: cover; }
+.brand-png-footer { position: absolute; top: 85%; left: 40%; transform: translate(-50%, 80px); width: 86vw; display: flex; justify-content: center; pointer-events: none; opacity: 0; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s, opacity 0.8s ease 0.3s; z-index: 5; }
+.brand-content-layer.show .brand-png-footer { opacity: 1; transform: translate(-50%, 0); }
+.brand-png-footer img { width: 100%; height: auto; object-fit: contain; }
+.brand-detail-split { position: fixed; top: 0; right: -100vw; width: 100vw; height: 100vh; background: #fff; z-index: 10000; display: flex; transition: right 0.7s cubic-bezier(0.77, 0, 0.175, 1); }
+.brand-detail-split.open { right: 0; }
+.split-left { flex: 7; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+/* 1. 恢复面板原始状态，让返回按钮待在最顶部 */
+.split-right { 
+    flex: 3; 
+    padding: 60px 50px; 
+    background: #fff; 
+    display: flex; 
+    flex-direction: column; 
+    /* 删除了 justify-content: center; */
+    box-shadow: -10px 0 30px rgba(0,0,0,0.03); 
+    z-index: 2;
+}
+/* 2. 返回按钮保持你最开始的样子，不用做任何修改 */
+.btn-return { 
+    cursor: pointer; 
+    font-weight: bold; 
+    margin-bottom: 50px; 
+    color: #777; 
+    font-size: 15px; 
+    display: inline-block; 
+    transition: 0.3s; 
+}
+.btn-return:hover { color: #000; transform: translateX(-5px); }
+#detail-title { 
+    font-size: 24px; 
+    margin-bottom: 30px; 
+    color: #111; 
+    letter-spacing: 1px;
+    text-align: center;
+    
+    /* 👉 [修改这里] 调节这个数值来控制文字的上下位置！
+       vh 代表屏幕高度的百分比。
+       如果你觉得偏下，就把 20vh 改小（比如 15vh 或 10vh）；
+       你也可以直接用 px（比如 margin-top: 120px;）来写死距离。*/
+    margin-top: 14vh; 
+}
+.detail-desc { font-size: 15px; line-height: 2.5; color: #555; overflow-y: auto; padding-right: 15px; }
+.detail-img-container { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 85vh; margin-top: -3vh; }
+.main-img-wrapper { max-width: 70%; max-height: 80vh; width: auto; height: auto; background: transparent; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: zoom-in; transition: all 0.3s ease; }
+#detail-main-img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+.detail-arrow { position: absolute; top: 50%; transform: translateY(-50%); font-size: 30px; color: #ccc; padding: 20px; cursor: pointer; transition: 0.3s; user-select: none; }
+.detail-arrow:hover { color: #000; transform: translateY(-50%) scale(1.2); }
+.detail-arrow.left { left: 15px; } .detail-arrow.right { right: 15px; } 
+.detail-dots { display: flex; gap: 10px; margin-top: 35px; flex-wrap: wrap; justify-content: center; max-width: 80%; }
+.detail-dots .d-dot { width: 8px; height: 8px; background: #ddd; border-radius: 50%; cursor: pointer; transition: 0.3s; }
+.detail-dots .d-dot.active { background: #000; transform: scale(1.3); }
+
+/* ==================================================
+   [4] 其他设计
+================================================== */
+#page-other { background: #f4f4f4; position: relative; overflow: hidden; }
+.other-layout { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; transform: translateY(80px); }
+
+.pocket-scene { position: relative; width: 340px; height: 260px; margin-top: calc(15vh + 20px); z-index: 10; perspective: 1000px; display: flex; justify-content: center; }
+
+/* 👉 [修改这里 3] 调节文件夹后板的大小和位置，完美还原立体层次感 */
+.pocket-img-back { 
+    position: absolute; z-index: 10; 
+    bottom: -10px; /* 调整离底部的距离 */
+    left: 50%; transform: translateX(-50%); 
+    width: 110%; /* 调整背景板的宽度，保持比例 */
+    height: auto; object-fit: contain; 
+}
+/* 👉 [修改这里 3] 调节文件夹前盖板的大小和位置 */
+.pocket-img-front { 
+    position: absolute; z-index: 30; pointer-events: none; 
+    bottom: -15px; /* 调整盖板离底部的距离 */
+    left: 50%; transform: translateX(-50%); 
+    width: 122%; /* 调整盖板的宽度，保持比例 */
+    height: auto; object-fit: contain; 
+}
+
+.pocket-items { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+
+/* 👉 [修改这里 4] 调节文件夹内部卡片（收起状态）的基础大小与位置 */
+.p-item { 
+    position: absolute; left: 50%;
+    /* 1. 调整卡片的原始长宽比例 */
+    width: 150px; 
+    height: 190px; 
+    /* 2. 调整基础底部定位 */
+    bottom: 90px; 
+
+    /* 👇 核心魔法：供JS读取的动态CSS变量 */
+    --init-y: 100px;      /* 收起时往下沉的距离（数值越大越靠下）*/
+    --init-scale: 0.4;   /* 收起时在包里的缩小比例（0.5即50%）*/
+
+    opacity: 0; 
+    transform: translate(-50%, var(--init-y)) scale(var(--init-scale)); 
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
+    cursor: pointer; transform-origin: bottom center; pointer-events: none; filter: drop-shadow(0 15px 20px rgba(0,0,0,0.15)); z-index: 20; 
+}
+.p-item img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.3s ease; border-radius: 8px; }
+.p-item.popped:hover { z-index: 60 !important; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.25)) brightness(1.05); }
+.p-item.popped:hover img { transform: scale(1.05); }
+
+.other-trigger-icons { margin-top: 80px; display: flex; gap: 60px; justify-content: center; /* 👉 新增：确保这三个按钮整体在屏幕居中 */gap: 30px;/* 👉 这里控制它们之间的空白距离，你可以随心调节（比如改大到 80px） */z-index: 40;/* 🌟 核心魔法：整体平移 */
+    transform: translateX(-3px); /* 👉 负数表示向左移动，正数表示向右移动，你可以自由调节这个数值！ */ }
+.trigger-wrapper { display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; transition: 0.3s; width: 110px; /* 🌟 核心魔法：强制每个包裹框都是 120px 宽！文字再长也不会挤压间距了 */}
+.trigger-wrapper img { width: 46px; height: 46px; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); transition: 0.3s; border-radius: 0; }
+.trigger-wrapper:hover img { transform: translateY(-8px) scale(1.1); filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); }
+.trigger-wrapper span { font-size: 14px; color: #525252; font-weight: bold; }
+.other-custom-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.1); z-index: 10000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+.other-custom-modal.open { display: flex; opacity: 1; }
+.btn-modal-close-global { position: absolute; top: 40px; left: 40px; width: 50px; height: 50px; background: rgba(0,0,0,0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; cursor: pointer; transition: 0.3s; z-index: 10001; backdrop-filter: blur(4px); }
+.btn-modal-close-global:hover { background: #000; transform: scale(1.1); }
+.other-modal-box { width: 60vw; height: 88vh; min-width: 800px; background: #fff; border-radius: 16px; position: relative; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); transform: translateY(20px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.other-custom-modal.open .other-modal-box { transform: translateY(0); }
+.layout-ip { display: flex; width: 100%; height: 100%; }
+.layout-ip .left-panel { flex: 1.3; background: #fafafa; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;}
+.layout-ip .right-panel { flex: 1; padding: 50px; display: flex; flex-direction: column; justify-content: center; }
+.layout-ip .right-panel h2 { font-size: 24px; margin-bottom: 20px; color: #111; }
+.layout-ip .right-panel .desc { font-size: 15px; color: #555; line-height: 1.8; overflow-y: auto;}
+.ip-slider-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 20px;}
+.ip-slide { width: 100%; height: 100%; object-fit: contain; position: absolute; transition: opacity 0.4s ease; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+.ip-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(0,0,0,0.2); color: #fff; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; font-size: 20px; z-index: 10; transition: 0.3s; }
+.ip-arrow:hover { background: rgba(0,0,0,0.6); }
+.ip-arrow.left { left: 15px; } .ip-arrow.right { right: 15px; }
+.layout-grid { display: flex; width: 100%; height: 100%; gap: 30px; }
+.layout-grid .left-panel { flex: 1; padding: 55px 35px 55px 75px; background: #fdfdfd; display: flex; flex-direction: column; overflow-y: auto; }
+.layout-grid .left-panel .main-media-box { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; margin-bottom: 25px; min-height: 0; }
+.layout-grid .left-panel .main-media-box img, .layout-grid .left-panel .main-media-box video { max-width: 100% !important; max-height: 100% !important; width: auto; height: auto; display: block; object-fit: contain; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin: 0 auto; }
+.left-panel-arrow { position: absolute; top: 38%; transform: translateY(-50%); width: 38px; height: 38px; background: rgba(0, 0, 0, 0.2); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; z-index: 50; transition: 0.2s; user-select: none; }
+.left-panel-arrow:hover { background: rgba(0, 0, 0, 0.6); transform: translateY(-50%) scale(1.1); }
+.left-panel-arrow.left { left: 40px; } .left-panel-arrow.right { right: 0px; }
+.layout-grid .left-panel h2 { text-align: left; font-size: 20px; margin-bottom: 15px; color: #111; flex-shrink: 0; padding: 0; }
+.layout-grid .left-panel .desc { text-align: left; font-size: 14px; color: #666; line-height: 1.8; flex-shrink: 0; padding: 0; }
+.layout-grid .right-panel { flex: 1.3; padding: 30px; display: flex; flex-direction: column; position: relative; background-color: #f4f4f4; }
+.grid-scroll-area { flex: 1; overflow-y: auto; display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: max-content; gap: 20px; align-content: start; padding: 10px 10px 40px 10px; -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%); }
+.grid-scroll-area::-webkit-scrollbar { display: none; }
+.grid-thumb { position: relative; width: 100%; aspect-ratio: 3/4; background: #eee; border-radius: 8px; overflow: hidden; cursor: pointer; transition: 0.3s; }
+.grid-thumb:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); filter: brightness(0.95); }
+.grid-thumb img, .grid-thumb video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.other-motion .grid-scroll-area { grid-template-rows: repeat(2, 1fr); align-content: stretch; height: 100%; }
+.other-motion .grid-thumb { aspect-ratio: auto; height: 100%; }
+
+/* =========================================================================
+   [7] 全局超清画廊 (Lightbox)
+========================================================================= */
+.global-lightbox { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 99999; display: none; align-items: center; justify-content: center; }
+.lb-toolbar { display: flex; align-items: center; gap: 15px; z-index: 100; margin-top: 15px; margin-bottom: 5px; background: rgba(22, 22, 25, 0.88); padding: 6px 20px; border-radius: 30px; box-shadow: 0 10px 35px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(5px); }
+.tool-btn { padding: 4px 12px; background: transparent; color: #fff; border: none; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.2s; user-select: none; }
+.tool-btn:hover { color: #fee30b; transform: scale(1.2); }
+.zoom-input-wrapper { display: flex; align-items: center; color: #fff; font-size: 13px; }
+#zoom-input { width: 45px; background: transparent; border: none; color: #fff; text-align: right; outline: none; font-size: 13px; font-weight: bold; padding-right: 2px; }
+#zoom-input::-webkit-inner-spin-button, #zoom-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.lb-content-wrapper { display: flex; flex-direction: column; align-items: center; width: 90vw; height: 100vh; justify-content: center; transition: all 0.4s ease; }
+.lb-img-container { width: 100%; height: 75vh; display: flex; justify-content: center; align-items: flex-start; overflow: hidden; cursor: grab; position: relative; transition: height 0.4s ease; }
+.lb-img-container:active { cursor: grabbing; }
+#lightbox-img { position: relative; max-height: 75vh; max-width: 90vw; width: auto; height: auto; object-fit: contain; transition: transform 0.05s linear; transform-origin: center top; cursor: zoom-in; border-radius: 12px;}
+#lightbox-caption { color: #bbb; font-size: 14px; line-height: 1.6; margin-top: 20px; text-align: center; width: 100%; max-width: 700px; z-index: 10; transition: all 0.4s ease; display: none; } 
+.lb-close { position: absolute; top: 30px; right: 50px; color: #fff; font-size: 30px; cursor: pointer; z-index: 100;}
+.lb-arrow { position: absolute; top: 50%; transform: translateY(-50%); color: #fff; font-size: 40px; cursor: pointer; z-index: 100; padding: 20px; opacity: 0.5; transition: 0.2s;}
+.lb-arrow:hover { opacity: 1; scale: 1.1; }
+.lb-arrow.left { left: 20px; } .lb-arrow.right { right: 20px; }
+
+.global-lightbox.graphic-split-mode #lightbox-caption { display: block; }
+.global-lightbox.graphic-split-mode .lb-content-wrapper { justify-content: flex-start; padding-top: 80px; }
+
+/* 👉 [修改这里 1] 修复项：海报与长图高度自适应，既不留太空，又彻底消灭滚动条！ */
+.global-lightbox.graphic-split-mode.mode-poster .lb-img-container,
+.global-lightbox.graphic-split-mode.mode-long .lb-img-container { height: 60vh; margin-bottom: 40px; }
+.global-lightbox.graphic-split-mode.mode-poster #lightbox-img,
+.global-lightbox.graphic-split-mode.mode-long #lightbox-img { max-height: 60vh; } 
+.global-lightbox.graphic-split-mode.mode-poster #lightbox-caption,
+.global-lightbox.graphic-split-mode.mode-long #lightbox-caption { 
+    height: auto;           /* 核心：根据文字量自适应高度 */
+    min-height: 80px;       /* 即使字少也不至于过扁 */
+    max-height: 25vh;       /* 防止字太多超出屏幕边界 */
+    width: 85vw; max-width: 1150px; margin-top: 15px; text-align: left; 
+    padding: 15px 40px; background: rgba(255, 255, 255, 0.08); 
+    border-radius: 12px; border: none; 
+    overflow-y: hidden !important; /* 强制关闭滚动条 */
+}
+
+/* 👉 [修改这里 1] 修复项：主视觉(KV)也统一自适应并关闭滚动条 */
+.global-lightbox.graphic-split-mode.mode-kv .lb-img-container { height: 60vh; margin-bottom: 0px; }
+.global-lightbox.graphic-split-mode.mode-kv #lightbox-img { max-height: 60vh; } 
+.global-lightbox.graphic-split-mode.mode-kv #lightbox-caption { 
+    height: auto;           /* 核心：根据文字量自适应高度 */
+    min-height: 80px;
+    max-height: 25vh;
+    width: 85vw; max-width: 1150px; margin-top: 15px; text-align: left; 
+    padding: 15px 40px; background: rgba(255, 255, 255, 0.08); 
+    border-radius: 12px; border: none; 
+    overflow-y: hidden !important; /* 强制关闭滚动条 */
+}
+
+/* 🌟 纯海报（单图模式）：完全没有文字框，图片彻底放大 */
+.global-lightbox.hide-caption .lb-img-container { height: 85vh !important; }
+.global-lightbox.hide-caption #lightbox-img { max-height: 85vh !important; }
+.global-lightbox.hide-caption #lightbox-caption { display: none !important; }
+
+.layout-grid .left-panel .main-media-box, .layout-grid .left-panel .main-media-box img, .layout-grid .left-panel .main-media-box video { box-shadow: none !important; background: transparent !important; }
+.other-ip .left-content-bundle { position: relative; transform: translateX(0px); top: 0px; }
+.other-card .left-content-bundle { position: relative; transform: translateX(12px); top: 0px; }
+.other-motion .left-content-bundle { position: relative; transform: translateX(12px); top: 0px; }
+.other-card .left-panel, .other-motion .left-panel { flex: 1.4 !important; }
+.other-card .right-panel, .other-motion .right-panel { flex: 1.2 !important; }
