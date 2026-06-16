@@ -37,7 +37,7 @@ const DIZZY_ELEMENT_PATHS = [
 
 const BOTTOM_TEXT_IMAGE_PATH = 'index-Asset/some/text-resume.png'; 
 const BOTTOM_STROBE_PATHS = [
-    'index-Asset/some/red star.png',  
+    'index-Asset/some/red-star.png',  
     'index-Asset/some/computer.png'    
 ];
 const BOTTOM_EXTRA_PATHS = [
