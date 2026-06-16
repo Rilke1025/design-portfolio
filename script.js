@@ -6,46 +6,46 @@
 // =========================================================================
 // 🌟 【素材控制台：路径配置区】 (保留你的原本设定，一字未动)
 // =========================================================================
-const HOME_BG_IMAGE_PATH = 'index-Asset/some/bac.png';         
-const HOME_CENTER_MAIN_PATH = 'index-Asset/some/center.png';   
+const HOME_BG_IMAGE_PATH = './index-Asset/some/bac.png';         
+const HOME_CENTER_MAIN_PATH = './index-Asset/some/center.png';   
 
 const SIDE_ICON_PATHS = [
-    'index-Asset/some/ai.png', 'index-Asset/some/ps.png', 'index-Asset/some/br-de.png',
-    'index-Asset/some/pic-2.png', 'index-Asset/some/dy-de.png', 'index-Asset/some/gemini.png',
-    'index-Asset/some/pic-3.png', 'index-Asset/some/gr-de.png',
-    'index-Asset/some/lovart.png', 'index-Asset/some/ot-de.png', 'index-Asset/some/pr.png',
-    'index-Asset/some/pic-1.png'
+    './index-Asset/some/ai.png', './index-Asset/some/ps.png', './index-Asset/some/br-de.png',
+    './index-Asset/some/pic-2.png', './index-Asset/some/dy-de.png', './index-Asset/some/gemini.png',
+    './index-Asset/some/pic-3.png', './index-Asset/some/gr-de.png',
+    './index-Asset/some/lovart.png', './index-Asset/some/ot-de.png', './index-Asset/some/pr.png',
+    './index-Asset/some/pic-1.png'
 ];
 
 const FLOWER_PATHS = [
-    'index-Asset/some/fo-1.png', 'index-Asset/some/fo-2.png', 'index-Asset/some/fo-3.png',
-    'index-Asset/some/fo-4.png', 'index-Asset/some/fo-5.png', 'index-Asset/some/fo-6.png',
-    'index-Asset/some/fo-5.png', 'index-Asset/some/fo-3.png' 
+    './index-Asset/some/fo-1.png', './index-Asset/some/fo-2.png', './index-Asset/some/fo-3.png',
+    './index-Asset/some/fo-4.png', './index-Asset/some/fo-5.png', './index-Asset/some/fo-6.png',
+    './index-Asset/some/fo-5.png', './index-Asset/some/fo-3.png' 
 ];
 
 const BRAIN_IMAGE_PATHS = [
-    'index-Asset/some/yellow.png',
-    'index-Asset/some/blue.png',
-    'index-Asset/some/red.png'
+    './index-Asset/some/yellow.png',
+    './index-Asset/some/blue.png',
+    './index-Asset/some/red.png'
 ];
 
-const DIZZY_LINE_IMAGE_PATH = 'index-Asset/some/xy.png';  
+const DIZZY_LINE_IMAGE_PATH = './index-Asset/some/xy.png';  
 const DIZZY_ELEMENT_PATHS = [
-    'index-Asset/some/x1.png','index-Asset/some/x2.png','index-Asset/some/x3.png',
-    'index-Asset/some/x4.png','index-Asset/some/x5.png','index-Asset/some/x6.png',
+    './index-Asset/some/x1.png','./index-Asset/some/x2.png','./index-Asset/some/x3.png',
+    './index-Asset/some/x4.png','./index-Asset/some/x5.png','./index-Asset/some/x6.png',
 ]; 
 
-const BOTTOM_TEXT_IMAGE_PATH = 'index-Asset/some/text-resume.png'; 
+const BOTTOM_TEXT_IMAGE_PATH = './index-Asset/some/text-resume.png'; 
 const BOTTOM_STROBE_PATHS = [
-    'index-Asset/some/red-star.png',  
-    'index-Asset/some/computer.png'    
+    './index-Asset/some/red-star.png',  
+    './index-Asset/some/computer.png'    
 ];
 const BOTTOM_EXTRA_PATHS = [
-    'index-Asset/some/zl.png',
-    'index-Asset/some/my.png'
+    './index-Asset/some/zl.png',
+    './index-Asset/some/my.png'
 ];
-const BULB_OFF_PATH = 'index-Asset/some/an.png';  
-const BULB_ON_PATH = 'index-Asset/some/liang.png';     
+const BULB_OFF_PATH = './index-Asset/some/an.png';  
+const BULB_ON_PATH = './index-Asset/some/liang.png';     
 
 // =========================================================================
 // 🎛️ 【独立元素调节控制台】
